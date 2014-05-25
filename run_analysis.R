@@ -36,6 +36,7 @@ if(!file.exists(data_dir)) {
 }
 
 feature_names <- read.table(filePath(data_dir,"features.txt"))[,2]
+# select only features which are either mean or standard deviation
 columns_to_keep <- which(grepl("mean()",feature_names,fixed=TRUE) | 
                              grepl("std()",feature_names,fixed=TRUE))
 
@@ -45,11 +46,14 @@ merged_data_set <- rbind(test_data_set, train_data_set)
 
 activity_labels <- read.table(filePath(data_dir,"activity_labels.txt"), 
                                 col.names=c("activity","activity_label"))
+# replace activity code with factor with appropriate labels
 merged_data_set$activity <- factor(merged_data_set$activity, 
                                    labels=activity_labels$activity_label)
 
 # creating clean data set containing averages of all the variables within the 
 # merged data set
 library(plyr)
+# calculate means for all columns grouping by activity and subject
 result <- ddply(merged_data_set, .(activity, subject), numcolwise(mean))
+# save the result dataset into a file
 write.table(result, file = "averages.txt", row.names = FALSE)
