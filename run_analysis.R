@@ -8,8 +8,9 @@ concat <- function(...) {
     paste(..., sep="")
 }
 
-# function to read Samsung dataset. Can be used to read either test or train datasets
-# returned data.frame contains only thouse columns from the data set whcih are 
+# Function to read a single Samsung dataset. Can be used to read either test or 
+# train datasets. 
+# Returned data.frame contains only thouse columns from the data set whcih are 
 # specififed in the columns_to_keep parameter plus subject and activity columns.
 # All the columns in the result data set are named appropriately, based on the 
 # values from parameter column_names. Please note that the function expects all 
@@ -30,8 +31,8 @@ data_dir = "./UCI HAR Dataset"
 
 # check that the Samsung data can be found in the working directory
 if(!file.exists(data_dir)) {
-    stop(paste("Cannot find the Samsung data in the working directory. Expecting to 
-         find it in directory ", data_dir))
+    stop(paste("Cannot find the Samsung data in the working directory. Expecting
+            to find it in directory ", data_dir))
 }
 
 feature_names <- read.table(filePath(data_dir,"features.txt"))[,2]
@@ -42,8 +43,10 @@ test_data_set <- get_tidy_dataset("test", feature_names, columns_to_keep)
 train_data_set <- get_tidy_dataset("train", feature_names, columns_to_keep)
 merged_data_set <- rbind(test_data_set, train_data_set)
 
-activity_labels <- read.table(filePath(data_dir,"activity_labels.txt"), col.names=c("activity","activity_label"))
-merged_data_set$activity <- factor(merged_data_set$activity, labels=activity_labels$activity_label)
+activity_labels <- read.table(filePath(data_dir,"activity_labels.txt"), 
+                                col.names=c("activity","activity_label"))
+merged_data_set$activity <- factor(merged_data_set$activity, 
+                                   labels=activity_labels$activity_label)
 
 # creating clean data set containing averages of all the variables within the 
 # merged data set
